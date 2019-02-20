@@ -11,11 +11,16 @@ var item_click_data = [];
 //number of times an items is viewed.
 var total_view_data = [];
 
+var myChart; // eslint-disable-line no-unused-vars
+
 //variable to the total number of selecting opportunities
 var TESTS = 25;
 
 //variable that stores the details of each item in an array (each instance of the item object)
 var catalog_options =[];
+
+//variable that stores the name of each item
+var catalog_names = [];
 
 var currently_displayed_left_item;
 var currently_displayed_middle_item;
@@ -44,6 +49,7 @@ var Item = function(name, url){
   this.clicks = 0;
   this.times_shown = 0;
   catalog_options.push(this);
+  catalog_names.push(name);
 };
 
 //function that assigns a particular item name and url to targets (tells us where they will be on the page)
@@ -109,45 +115,46 @@ var handle_click_on_item = function (event){
         //send times shown data to an array that holds the number of times the item was shown.
         total_view_data.push(catalog_options[k].times_shown);
       }
-      myChart();
+      console.log(catalog_names);
+      render_myChart();
+      var stringy_catalog_options = JSON.stringify(catalog_options);
+      localStorage.setItem('catalog_options', stringy_catalog_options);
+      console.log(stringy_catalog_options);
     }
   }
 };
 
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: catalog_options.name,
-    datasets: [{
-      label: '# of Clicks',
-      data: item_click_data,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero:true
-        }
+function render_myChart(){
+  myChart = new Chart(ctx, {//eslint-disable-line no-undef
+    type: 'bar',
+    data: {
+      labels: catalog_names,
+      datasets: [{
+        label: '# of Clicks',
+        data: item_click_data,
+        backgroundColor:
+          'rgba(255, 99, 132, 0.2)',
+        borderColor:
+          'rgba(255,99,132,1)',
+        borderWidth: 1
       }]
+    },
+    options: {
+      title: {
+      },
+      legend: {
+
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
     }
-  }
-});
+  });
+}
 
 //MAIN BODY OF CODE
 //create instances of all items (note in the Item object has code that sends each instance to an array)
@@ -163,7 +170,7 @@ new Item ('Doggie Duck Lips', 'assets/dog-duck.jpg');
 new Item ('Dragon Meat', 'assets/dragon.jpg');
 new Item ('Silver-Pen', 'assets/pen.jpg');
 new Item ('Pet Sweep', 'assets/pet-sweep.jpg');
-new Item ('Scissors', 'assets/scissors.jpg');
+new Item ('Pizza Scissors', 'assets/scissors.jpg');
 new Item ('Shark Bag', 'assets/shark.jpg');
 new Item ('Baby Sweep', 'assets/sweep.png');
 new Item ('Tauntaun Sleep', 'assets/tauntaun.jpg');
@@ -172,6 +179,9 @@ new Item ('OctoUSB', 'assets/usb.gif');
 new Item ('Watering Can', 'assets/water-can.jpg');
 new Item ('Tilted Wine Glass', 'assets/wine-glass.jpg');
 
+var storage_stringy_catalog_options = localStorage.getItem('catalog_options');
+catalog_options = JSON.parse(storage_stringy_catalog_options);
+console.log(catalog_options);
 
 //initialize the items in the selection box
 currently_displayed_left_item = catalog_options[0];
