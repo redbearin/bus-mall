@@ -3,12 +3,19 @@
 //GLOBAL VARIABLES
 
 var click_data = document.getElementById('list');
+var ctx = document.getElementById('myChart').getContext('2d');
+
+//number of times and item is clicked into an array.
+var item_click_data = [];
+
+//number of times an items is viewed.
+var total_view_data = [];
 
 //variable to the total number of selecting opportunities
 var TESTS = 25;
 
 //variable that stores the details of each item in an array (each instance of the item object)
-var catalog_options=[];
+var catalog_options =[];
 
 var currently_displayed_left_item;
 var currently_displayed_middle_item;
@@ -83,7 +90,6 @@ var handle_click_on_item = function (event){
     if (TESTS <= 0){
       container_for_items.removeEventListener('click', handle_click_on_item);
       for (var k = 0; k < catalog_options.length; k++){
-        //debugger;
         if (catalog_options[k].times_shown === 0) {
           var percent = 0;
         }
@@ -92,72 +98,56 @@ var handle_click_on_item = function (event){
         }
         //created the element
         var list_element = document.createElement('li');
-        //add content
+        //add content to an element
         list_element.textContent = `${catalog_options[k].name} -- clicks: ${catalog_options[k].clicks}, times shown: ${catalog_options[k].times_shown}, percent of time selected: ${percent}`;
+        //display on the page
         click_data.appendChild(list_element);
-      }
-    }
-    //for (var )
-    //var li_el = document.create_element('li');
-    //li_el.textContent
-    //remove images
 
-    //render results
-    //var canvas_el = document.getelementbyId ('goat_results');
-    //var ctx
-    /*var specific_item_click_data = [];
-      for (var i = 0; i < catalog_options.length; i++){
-        item_click_data.push(catalog_options[i].clicks);
-      }
-      var total_clicks = [];
-      for (var j = 0; j < catalog_options.length; j++){
-        _click_data.push(the_herd[i].clicks);
-      }
+        //send click data to array that holds the number of times the item clicked.
+        item_click_data.push(catalog_options[k].clicks);
 
-      //add a Chart JS CDN
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: goat_click_labels,
-        datasets: [{
-            label: '# of Clicks',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
+        //send times shown data to an array that holds the number of times the item was shown.
+        total_view_data.push(catalog_options[k].times_shown);
+      }
+      myChart();
     }
-});
-
-myChart();
-    }
-  */
   }
 };
+
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: catalog_options.name,
+    datasets: [{
+      label: '# of Clicks',
+      data: item_click_data,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero:true
+        }
+      }]
+    }
+  }
+});
 
 //MAIN BODY OF CODE
 //create instances of all items (note in the Item object has code that sends each instance to an array)
@@ -191,10 +181,3 @@ currently_displayed_right_item = catalog_options[2];
 //EXTERNAL CODE
 //add an event listener to activate on a mouse click
 container_for_items.addEventListener('click', handle_click_on_item);
-
-
-//var my_canvas = document.getElementById
-
-//var ctx = my_canvas.getContent('2d');
-//ctx.fillRect (40, 50, 100, 200);
-//ctx.fillStyle ();
