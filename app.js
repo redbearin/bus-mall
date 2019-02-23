@@ -15,7 +15,7 @@ var total_view_data = [];
 var myChart; // eslint-disable-line no-unused-vars
 
 //variable to the total number of selecting opportunities
-var TESTS = 5;
+var TESTS = 25;
 
 //variable that stores the details of each item in an array (each instance of the item object)
 var catalog_options =[];
@@ -66,10 +66,15 @@ var render_item = function(the_item, target_img, target_h2){
 var pick_new_items = function (){
   //picking new items and placing them on the page
   //pick a random array indice that will be used to select image (next code block)
-  var left_item_idx = Math.floor(Math.random() * catalog_options.length);
-  var middle_item_idx = Math.floor(Math.random() * catalog_options.length);
-  var right_item_idx = Math.floor(Math.random() * catalog_options.length);
+  var left_item_idx = 0;
+  var middle_item_idx = 0;
+  var right_item_idx= 0;
 
+  while (left_item_idx === middle_item_idx || middle_item_idx === right_item_idx || left_item_idx === right_item_idx) {
+    left_item_idx = Math.floor(Math.random() * catalog_options.length);
+    middle_item_idx = Math.floor(Math.random() * catalog_options.length);
+    right_item_idx = Math.floor(Math.random() * catalog_options.length);
+  }
   //load the randomly selected images into the placeholders
   currently_displayed_left_item = catalog_options[left_item_idx];
   currently_displayed_middle_item = catalog_options[middle_item_idx];
